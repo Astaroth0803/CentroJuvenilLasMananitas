@@ -156,8 +156,8 @@ const filteredAndSortedBeneficiaries = computed(() => {
     if (searchQuery.value) {
         const query = searchQuery.value.toLowerCase()
         result = result.filter(b => {
-            const fullName = `${b.first_name} ${b.last_name}`.toLowerCase()
-            const ci = b.ci.toLowerCase()
+            const fullName = `${b.first_name || ''} ${b.last_name || ''}`.toLowerCase()
+            const ci = (b.ci || '').toLowerCase()
             return fullName.includes(query) || ci.includes(query)
         })
     }
@@ -169,8 +169,8 @@ const filteredAndSortedBeneficiaries = computed(() => {
             let valB = b[sortKey.value] || ''
             
             if (sortKey.value === 'first_name') {
-                valA = `${a.first_name} ${a.last_name}`.toLowerCase()
-                valB = `${b.first_name} ${b.last_name}`.toLowerCase()
+                valA = `${a.first_name || ''} ${a.last_name || ''}`.toLowerCase()
+                valB = `${b.first_name || ''} ${b.last_name || ''}`.toLowerCase()
             } else {
                 valA = valA.toString().toLowerCase()
                 valB = valB.toString().toLowerCase()
