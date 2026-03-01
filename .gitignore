@@ -27,6 +27,9 @@ db.sqlite3
 .env.local
 .env.production
 
+# Django settings (each environment has its own)
+backend/config/settings.py
+
 # ========================
 # Node / Vue
 # ========================
