@@ -33,8 +33,9 @@
      </div>
 
     <!-- Active List -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
+    <div class="bg-white rounded-lg shadow overflow-hidden w-full">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
             <th @click="sortBy('first_name')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 group select-none">
@@ -83,7 +84,8 @@
               </td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
 
     <!-- Simple Add Form Modal -->
@@ -154,10 +156,10 @@ const filteredAndSortedBeneficiaries = computed(() => {
 
     // 1. Filter
     if (searchQuery.value) {
-        const query = searchQuery.value.toLowerCase()
+        const query = searchQuery.value?.toLowerCase() || ''
         result = result.filter(b => {
             const fullName = `${b.first_name || ''} ${b.last_name || ''}`.toLowerCase()
-            const ci = (b.ci || '').toLowerCase()
+            const ci = b.ci?.toLowerCase() || ''
             return fullName.includes(query) || ci.includes(query)
         })
     }
@@ -172,8 +174,8 @@ const filteredAndSortedBeneficiaries = computed(() => {
                 valA = `${a.first_name || ''} ${a.last_name || ''}`.toLowerCase()
                 valB = `${b.first_name || ''} ${b.last_name || ''}`.toLowerCase()
             } else {
-                valA = valA.toString().toLowerCase()
-                valB = valB.toString().toLowerCase()
+                valA = valA?.toString()?.toLowerCase() || ''
+                valB = valB?.toString()?.toLowerCase() || ''
             }
 
             if (valA < valB) return -1 * sortOrder.value

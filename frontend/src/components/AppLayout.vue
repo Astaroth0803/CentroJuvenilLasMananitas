@@ -1,8 +1,11 @@
 <template>
   <div class="flex min-h-screen bg-gray-50">
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div v-show="isSidebarOpen" @click="isSidebarOpen = false" class="fixed inset-0 bg-gray-900/50 z-40 md:hidden transition-opacity"></div>
+
     <!-- Sidebar -->
-    <aside class="w-64 min-h-screen bg-white border-r border-gray-100 shadow-sm flex flex-col sticky top-0 h-screen shrink-0">
+    <aside :class="['fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-100 shadow-xl md:shadow-sm flex flex-col transition-transform duration-300 md:relative md:translate-x-0', isSidebarOpen ? 'translate-x-0' : '-translate-x-full']">
 
       <!-- Logo / Brand -->
       <div class="flex items-center gap-3 px-5 py-5 border-b border-gray-100">
@@ -90,8 +93,16 @@
 
       <!-- Topbar -->
       <header class="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm px-6 py-3 flex items-center justify-between shrink-0">
-        <!-- Page title -->
-        <h2 class="text-base font-bold text-gray-700 tracking-tight">{{ pageTitle }}</h2>
+        <div class="flex items-center gap-3">
+          <!-- Mobile menu button -->
+          <button @click="isSidebarOpen = true" class="md:hidden p-2 -ml-2 text-gray-500 rounded-md hover:bg-gray-100 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <!-- Page title -->
+          <h2 class="text-base font-bold text-gray-700 tracking-tight">{{ pageTitle }}</h2>
+        </div>
 
         <!-- Right: date + avatar -->
         <div class="flex items-center gap-4">
@@ -118,11 +129,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const isSidebarOpen = ref(false)
+
+watch(() => route.path, () => {
+    isSidebarOpen.value = false
+})
 
 const pageTitles = {
   Dashboard: 'Panel de Control',

@@ -19,6 +19,10 @@ class AttendanceRecord(models.Model):
 
     class Meta:
         unique_together = ('beneficiary', 'event', 'date')
+        indexes = [
+            models.Index(fields=['date'], name='idx_asistencia_fecha'),
+            models.Index(fields=['event', 'date'], name='idx_evento_fecha'),
+        ]
 
     def __str__(self):
         return f"{self.beneficiary} -> {self.event} ({self.date})"
