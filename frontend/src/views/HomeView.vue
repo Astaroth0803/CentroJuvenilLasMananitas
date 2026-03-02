@@ -19,7 +19,7 @@
           </p>
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-md">
             Centro Juvenil <br />
-            <span class="text-orange-200">y Biblioteca</span>
+            <span class="text-orange-200">Y Biblioteca</span>
           </h1>
           <h2 class="text-3xl md:text-4xl font-bold mt-2 text-white/90 tracking-wide drop-shadow-sm">
             Las Mañanitas

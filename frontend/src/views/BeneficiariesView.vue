@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
 
     <!-- Main Content -->
     <div class="max-w-[1400px] mx-auto p-6 md:p-8 space-y-6">
 
      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-       <h1 class="text-3xl font-bold text-gray-800">Manejo de Usuarios</h1>
+       <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manejo de Usuarios</h1>
        <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
           <div class="relative w-full sm:w-64">
              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -13,16 +13,16 @@
                   <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
                 </svg>
              </div>
-             <input v-model="searchQuery" type="text" placeholder="Buscar por nombre o cédula..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 sm:text-sm shadow-sm transition-colors">
+             <input v-model="searchQuery" type="text" placeholder="Buscar por nombre o cédula..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500 sm:text-sm shadow-sm transition-colors">
           </div>
           <div class="flex gap-2">
-            <button @click="exportToExcel" :disabled="!filteredAndSortedBeneficiaries.length" class="flex flex-row items-center justify-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 font-medium disabled:opacity-50 transition-colors">
+            <button @click="exportToExcel" :disabled="!filteredAndSortedBeneficiaries.length" class="flex flex-row items-center justify-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-md hover:bg-green-100 dark:hover:bg-green-900/40 font-medium disabled:opacity-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a1.125 1.125 0 1 1-2.25 0 1.125 1.125 0 0 1 2.25 0Zm-8.25 4.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v.75c0 .621-.504 1.125-1.125 1.125H6.375a1.125 1.125 0 0 1-1.125-1.125v-.75Z" />
                 </svg>
                 Excel
             </button>
-            <button @click="exportToPDF" :disabled="!filteredAndSortedBeneficiaries.length" class="flex flex-row items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 font-medium disabled:opacity-50 transition-colors">
+            <button @click="exportToPDF" :disabled="!filteredAndSortedBeneficiaries.length" class="flex flex-row items-center justify-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 font-medium disabled:opacity-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
@@ -33,48 +33,48 @@
      </div>
 
     <!-- Active List -->
-    <div class="bg-white rounded-lg shadow overflow-hidden w-full">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden w-full transition-colors">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700/50">
           <tr>
-            <th @click="sortBy('first_name')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 group select-none">
+            <th @click="sortBy('first_name')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 group select-none">
                 <div class="flex items-center gap-1">
                     Nombre Completo
                     <span v-if="sortKey === 'first_name'" class="text-orange-500">{{ sortOrder === 1 ? '↑' : '↓' }}</span>
                     <span v-else class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">↕</span>
                 </div>
             </th>
-            <th @click="sortBy('ci')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 group select-none">
+            <th @click="sortBy('ci')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 group select-none">
                 <div class="flex items-center gap-1">
                     Cédula
                     <span v-if="sortKey === 'ci'" class="text-orange-500">{{ sortOrder === 1 ? '↑' : '↓' }}</span>
                     <span v-else class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">↕</span>
                 </div>
             </th>
-            <th @click="sortBy('sector')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 group select-none">
+            <th @click="sortBy('sector')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 group select-none">
                 <div class="flex items-center gap-1">
                     Sector
                     <span v-if="sortKey === 'sector'" class="text-orange-500">{{ sortOrder === 1 ? '↑' : '↓' }}</span>
                     <span v-else class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">↕</span>
                 </div>
             </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="b in filteredAndSortedBeneficiaries" :key="b.id">
-            <td class="px-6 py-4 whitespace-nowrap">{{ b.first_name }} {{ b.last_name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ b.ci }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ b.sector }}</td>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tr v-for="b in filteredAndSortedBeneficiaries" :key="b.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{{ b.first_name }} {{ b.last_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">{{ b.ci }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">{{ b.sector }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <router-link :to="`/beneficiaries/${b.id}`" class="text-green-600 hover:text-green-900 font-bold mr-4">Ver Perfil</router-link>
-              <button class="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-              <button @click="deleteItem(b.id)" class="text-red-600 hover:text-red-900">Eliminar</button>
+              <router-link :to="`/beneficiaries/${b.id}`" class="text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 font-bold mr-4">Ver Perfil</router-link>
+              <button class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 mr-4">Editar</button>
+              <button @click="deleteItem(b.id)" class="text-red-600 dark:text-red-400 hover:text-red-900">Eliminar</button>
             </td>
           </tr>
           <tr v-if="filteredAndSortedBeneficiaries.length === 0">
-              <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+              <td colspan="4" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                 <div v-if="searchQuery">
                     No se encontraron resultados para "<span class="font-semibold">{{ searchQuery }}</span>".
                 </div>

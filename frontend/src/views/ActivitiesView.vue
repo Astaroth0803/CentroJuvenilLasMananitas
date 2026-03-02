@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
 
     <!-- Main Content -->
     <div class="max-w-[1400px] mx-auto p-6 md:p-8 space-y-6">
 
      <div class="flex justify-between items-center mb-6">
-       <h1 class="text-3xl font-bold text-gray-800">Manejo de Actividades</h1>
+       <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manejo de Actividades</h1>
        <div class="flex gap-4">
           <button @click="showForm = true" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium shadow-sm">
             + Nueva Actividad
@@ -14,15 +14,15 @@
      </div>
 
      <!-- Toggle Tabs -->
-     <div class="flex border-b border-gray-200 mb-6">
+     <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
         <button @click="activeTab = 'ACTIVE'" 
                 class="px-6 py-3 font-semibold text-sm transition-colors border-b-2"
-                :class="activeTab === 'ACTIVE' ? 'border-orange-600 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                :class="activeTab === 'ACTIVE' ? 'border-orange-600 text-orange-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300'">
             Activas
         </button>
         <button @click="activeTab = 'ARCHIVED'" 
                 class="px-6 py-3 font-semibold text-sm transition-colors border-b-2"
-                :class="activeTab === 'ARCHIVED' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                :class="activeTab === 'ARCHIVED' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300'">
             Archivadas
         </button>
      </div>
@@ -31,11 +31,11 @@
        <!-- Active Activities -->
        <div v-for="act in displayedActivities" :key="act.id" 
             @click="goToProfile(act.id)"
-            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-orange-200 cursor-pointer transition-all group flex flex-col justify-between h-full">
+            class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-700 cursor-pointer transition-all group flex flex-col justify-between h-full">
           
           <div>
               <div class="flex justify-between items-start mb-4">
-                  <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-500 group-hover:bg-orange-50 group-hover:text-orange-600 transition-colors">
+                  <div class="w-12 h-12 bg-gray-50 dark:bg-gray-700 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover:bg-orange-50 dark:group-hover:bg-orange-900/30 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
                       </svg>
@@ -60,7 +60,7 @@
                   </div>
               </div>
               
-              <h2 class="text-[17px] font-extrabold text-[#1c2b42]">{{ act.name }}</h2>
+              <h2 class="text-[17px] font-extrabold text-gray-900 dark:text-gray-100">{{ act.name }}</h2>
               <span class="inline-block mt-2 px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full"
                     :class="act.category === 'PERMANENT' ? 'bg-[#e8f7f5] text-[#1e9d8e]' : 'bg-[#feefe6] text-[#f05100]'">
                  {{ act.category === 'PERMANENT' ? 'Permanente' : 'Eventual' }}
@@ -87,32 +87,32 @@
     </div>
 
     <!-- Activity Form Modal -->
-    <div v-if="showForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4 text-[#1c2b42]">Crear Actividad</h2>
+    <div v-if="showForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900/70 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 dark:border-gray-700">
+            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Crear Actividad</h2>
             <form @submit.prevent="saveActivity" class="space-y-4">
                 <div>
-                   <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
-                   <input v-model="form.name" required type="text" class="block w-full rounded-xl border-gray-300 shadow-sm p-3 border focus:ring-orange-500">
+                   <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+                   <input v-model="form.name" required type="text" class="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm p-3 border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-orange-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Categoría</label>
-                    <select v-model="form.category" required class="block w-full rounded-xl border-gray-300 shadow-sm p-3 border focus:ring-orange-500 bg-white">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
+                    <select v-model="form.category" required class="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm p-3 border focus:ring-orange-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                         <option value="PERMANENT">Permanente</option>
                         <option value="EVENTUAL">Eventual</option>
                     </select>
                 </div>
                 <div v-if="form.category === 'EVENTUAL'">
-                   <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha Límite</label>
-                   <input v-model="form.deadline_date" required type="date" class="block w-full rounded-xl border-gray-300 shadow-sm p-3 border focus:ring-orange-500">
+                   <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Fecha Límite</label>
+                   <input v-model="form.deadline_date" required type="date" class="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm p-3 border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-orange-500">
                 </div>
                 <div>
-                   <label class="block text-sm font-semibold text-gray-700 mb-1">Descripción</label>
-                   <textarea v-model="form.description" rows="3" class="block w-full rounded-xl border-gray-300 shadow-sm p-3 border focus:ring-orange-500"></textarea>
+                   <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
+                   <textarea v-model="form.description" rows="3" class="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm p-3 border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-orange-500"></textarea>
                 </div>
                 
                 <div class="flex justify-end gap-3 mt-8">
-                    <button type="button" @click="showForm = false" class="px-5 py-2.5 font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">Cancelar</button>
+                    <button type="button" @click="showForm = false" class="px-5 py-2.5 font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors">Cancelar</button>
                     <button type="submit" class="px-5 py-2.5 bg-[#1e9d8e] text-white font-semibold rounded-xl hover:bg-[#1a8b7e] shadow-sm transition-colors">Guardar</button>
                 </div>
             </form>
@@ -120,17 +120,17 @@
     </div>
 
     <!-- Reactivate Form Modal -->
-    <div v-if="showReactivateForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4 text-[#1c2b42]">Reactivar Actividad Eventual</h2>
+    <div v-if="showReactivateForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 dark:bg-gray-900/70 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 dark:border-gray-700">
+            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Reactivar Actividad Eventual</h2>
             <form @submit.prevent="submitReactivate" class="space-y-4">
-                <p class="text-sm text-gray-600 mb-4">Para reactivar esta actividad, debes establecer una nueva fecha límite obligatoria.</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Para reactivar esta actividad, debes establecer una nueva fecha límite obligatoria.</p>
                 <div>
-                   <label class="block text-sm font-semibold text-gray-700 mb-1">Nueva Fecha Límite</label>
-                   <input v-model="reactivateForm.deadline_date" required type="date" class="block w-full rounded-xl border-gray-300 shadow-sm p-3 border focus:ring-orange-500">
+                   <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Nueva Fecha Límite</label>
+                   <input v-model="reactivateForm.deadline_date" required type="date" class="block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-sm p-3 border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-orange-500">
                 </div>
                 <div class="flex justify-end gap-3 mt-8">
-                    <button type="button" @click="showReactivateForm = false" class="px-5 py-2.5 font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">Cancelar</button>
+                    <button type="button" @click="showReactivateForm = false" class="px-5 py-2.5 font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors">Cancelar</button>
                     <button type="submit" class="px-5 py-2.5 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 shadow-sm transition-colors">Activar</button>
                 </div>
             </form>

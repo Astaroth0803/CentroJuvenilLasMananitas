@@ -1,10 +1,10 @@
+from datetime import date, timedelta
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db.models import Count
 from core.models import Beneficiary, Activity
-from .models import AttendanceRecord
-from datetime import date, timedelta
+from .models import AttendanceRecord, Excursion
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -336,3 +336,89 @@ def attendance_chart_data(request):
     data = [counts_by_date.get(d, 0) for d in days]
 
     return Response({'labels': labels, 'data': data})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def system_notifications(request):
+    """
+    Returns a unified list of system alerts/notifications:
+    - Birthdays (Today and next 7 days)
+    - Activities close to deadline
+    - Excursions that are past their date but not marked as finished
+    """
+    today = date.today()
+    notifications = []
+    
+    # 1. Birthdays
+    # Note: Extracting month/day cross-year is tricky in simple ORM without ExtractMonth etc, 
+    # but for simplicity we'll pull all active users and filter in memory if the DB is small enough,
+    # OR use ExtractMonth/Day. Given this is SQLite/small DB, we'll do extract.
+    from django.db.models.functions import ExtractMonth, ExtractDay
+    upcoming_limit = today + timedelta(days=7)
+    
+    # Easier approximation: just get those whose birthday is EXACTLY today or next days.
+    # To handle wrap-around years, it's safer to just check month/day combinations.
+    active_bens = Beneficiary.objects.filter(is_active=True, dob__isnull=False).annotate(
+        birth_month=ExtractMonth('dob'),
+        birth_day=ExtractDay('dob')
+    )
+    
+    for b in active_bens:
+        # Reconstruct their birthday for THIS year
+        try:
+            bday_this_year = date(today.year, b.birth_month, b.birth_day)
+        except ValueError:
+            # Leap year edge case (Feb 29 on a non-leap year)
+            bday_this_year = date(today.year, 2, 28)
+            
+        if today <= bday_this_year <= upcoming_limit:
+            if bday_this_year == today:
+                msg = f"¡Hoy es el cumpleaños de {b.first_name} {b.last_name}!"
+            else:
+                msg = f"{b.first_name} {b.last_name} cumple años el {bday_this_year.strftime('%d/%m')}."
+                
+            notifications.append({
+                'id': f'bday_{b.id}',
+                'type': 'birthday',
+                'title': 'Cumpleaños',
+                'message': msg,
+                'date': bday_this_year.strftime('%Y-%m-%d'),
+                'is_urgent': bday_this_year == today
+            })
+            
+    # 2. Expiring Activities
+    expiring_acts = Activity.objects.filter(
+        is_active=True, 
+        deadline_date__isnull=False,
+        deadline_date__gte=today,
+        deadline_date__lte=upcoming_limit
+    )
+    for act in expiring_acts:
+        notifications.append({
+            'id': f'act_{act.id}',
+            'type': 'activity',
+            'title': 'Actividad por expirar',
+            'message': f"La actividad '{act.name}' expira el {act.deadline_date.strftime('%d/%m')}.",
+            'date': act.deadline_date.strftime('%Y-%m-%d'),
+            'is_urgent': act.deadline_date == today
+        })
+        
+    # 3. Expired Excursions (Not finalized)
+    expired_excursions = Excursion.objects.filter(
+        fecha_evento__lt=today
+    ).exclude(estado='finalizado').exclude(estado='cancelado')
+    
+    for exc in expired_excursions:
+        notifications.append({
+            'id': f'exc_{exc.id}',
+            'type': 'warning',
+            'title': 'Excursión Pendiente',
+            'message': f"La excursión '{exc.nombre}' ya pasó ({exc.fecha_evento.strftime('%d/%m')}) y sigue en estado '{exc.get_estado_display()}'.",
+            'date': exc.fecha_evento.strftime('%Y-%m-%d'),
+            'is_urgent': True
+        })
+        
+    # Sort notifications by urgency and date
+    notifications.sort(key=lambda x: (not x['is_urgent'], x['date']))
+    
+    return Response(notifications)
