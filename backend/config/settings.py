@@ -159,7 +159,6 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }
-
 # Simple JWT
 from datetime import timedelta
 SIMPLE_JWT = {
