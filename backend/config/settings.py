@@ -137,12 +137,26 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 AUTH_USER_MODEL = 'accounts.User'
 
 # CORS
-CORS_ALLOW_ALL_ORIGINS = True # Allow all for local dev frontend
+CORS_ALLOW_ALL_ORIGINS = DEBUG # Allow all only in local dev
+
+if not DEBUG:
+    # Add your production frontend domains here
+    CORS_ALLOWED_ORIGINS = [
+        "https://tudominio.com",
+        "http://34.237.218.62",
+        "https://www.tudominio.com",
+    ]
 
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ) if not DEBUG else (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }
 
